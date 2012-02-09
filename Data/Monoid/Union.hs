@@ -31,14 +31,14 @@ import qualified Data.List as List
 import Data.Monoid
 import Data.Monoid.Reducer
 
+{-# SPECIALIZE union :: IntMap a -> IntMap a -> IntMap a #-}
+{-# SPECIALIZE union :: Ord k => Map k a -> Map k a -> Map k a #-}
+{-# SPECIALIZE union :: Eq a => [a] -> [a] -> [a] #-}
+{-# SPECIALIZE union :: Ord a => Set a -> Set a -> Set a #-}
+{-# SPECIALIZE union :: IntSet -> IntSet -> IntSet #-}
 -- | A Container suitable for the 'Union' 'Monoid'
 class HasUnion f where
     empty :: f
-    {-# SPECIALIZE union :: IntMap a -> IntMap a -> IntMap a #-}
-    {-# SPECIALIZE union :: Ord k => Map k a -> Map k a -> Map k a #-}
-    {-# SPECIALIZE union :: Eq a => [a] -> [a] -> [a] #-}
-    {-# SPECIALIZE union :: Ord a => Set a -> Set a -> Set a #-}
-    {-# SPECIALIZE union :: IntSet -> IntSet -> IntSet #-}
     union :: f -> f -> f
 
 instance HasUnion (IntMap a) where
@@ -75,10 +75,10 @@ instance (HasUnion f) => Reducer f (Union f) where
 instance Functor Union where
     fmap f (Union a) = Union (f a)
 
+{-# SPECIALIZE unionWith :: (a -> a -> a) -> IntMap a -> IntMap a -> IntMap a #-}
+{-# SPECIALIZE unionWith :: Ord k => (a -> a -> a) -> Map k a -> Map k a -> Map k a #-}
 -- | Polymorphic containers that we can supply an operation to handle unions with
 class Functor f => HasUnionWith f where
-    {-# SPECIALIZE unionWith :: (a -> a -> a) -> IntMap a -> IntMap a -> IntMap a #-}
-    {-# SPECIALIZE unionWith :: Ord k => (a -> a -> a) -> Map k a -> Map k a -> Map k a #-}
     unionWith :: (a -> a -> a) -> f a -> f a -> f a
     emptyWith :: f a 
 

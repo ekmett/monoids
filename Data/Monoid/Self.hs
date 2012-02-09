@@ -22,7 +22,7 @@ module Data.Monoid.Self
     ( Self(Self, getSelf)
     )  where
 
-import Data.Monoid (Monoid)
+import Data.Monoid (Monoid(..))
 import Data.Monoid.Reducer (Reducer, unit)
 
 newtype Self m = Self { getSelf :: m } deriving (Monoid)
@@ -32,3 +32,4 @@ instance Monoid m => Reducer m (Self m) where
 
 instance Functor Self where
     fmap f (Self x) = Self (f x)
+
